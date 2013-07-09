@@ -1,6 +1,6 @@
 (ns tagparser.core)
 (import 'java.io.File)
-(def f (File. "/Users/matthewmolloy/workspace/chunkmapper2/out.txt"))
+(def f (File. "/Users/matthewmolloy/workspace/chunkmapper2/horse.txt"))
 
 (def lines (-> f slurp (.split "\n")))
 
