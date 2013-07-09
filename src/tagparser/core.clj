@@ -41,7 +41,7 @@
 
 (def code-lines
   (filter identity
-          (for [line lines]
+          (for [line (butlast lines)]
             (let [
                   type (get-type line)
                   name (or (if (empty? @stack) "root"
@@ -55,7 +55,6 @@
                          (= "TAG_Byte" type) (str "(byte) " value)
                          (= "TAG_Float" type) (str "(float) " value)
                          :default value)
-                  java-type (get-java-type type)
                   generic (-> line (.split "entries of type ")
                               second get-java-type)
                   get-parent #(-> @stack peek %)
@@ -67,11 +66,11 @@
                (= type "TAG_Compound")
                (do
                  (swap! stack #(conj % {:type type :name name :numbered-name numbered-name :generic generic}))
-                 (format "%sCompoundTag %s = new CompoundTag();\n" indent-str numbered-name))
+                 (format "\n%sCompoundTag %s = new CompoundTag();\n" indent-str numbered-name))
                (= type "TAG_List")
                (do
                  (swap! stack #(conj % {:type type :name name :numbered-name numbered-name :generic generic}))
-                 (format "%sListTag<%s> %s = new ListTag<%s>();\n" indent-str generic numbered-name generic))
+                 (format "\n%sListTag<%s> %s = new ListTag<%s>();\n" indent-str generic numbered-name generic))
                (comment-tags type)
                (str "//" line \newline)
                (leaf-tags type)
