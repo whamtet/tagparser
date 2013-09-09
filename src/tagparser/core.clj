@@ -1,5 +1,7 @@
 (ns tagparser.core)
 (import 'java.io.File)
+
+;TEXT FILE REMEMBER!!!
 (def f (File. "/Users/matthewmolloy/workspace/chunkmapper2/horse.txt"))
 
 (def lines (-> f slurp (.split "\n")))
@@ -8,10 +10,12 @@
                 "TAG_Byte" "TAG_Short" "TAG_Int" "TAG_Long"
                 "TAG_Float" "TAG_Double" "TAG_String"
                 "TAG_List" "TAG_Compound"])
+
 (def java-types [nil nil
                  "ByteTag" "ShortTag" "IntTag" "LongTag"
                  "FloatTag" "DoubleTag" "StringTag"
                  "ListTag" "CompoundTag"])
+
 (def get-java-type (zipmap tag-types java-types))
 
 (defn get-type [line]
@@ -95,13 +99,7 @@
                    )))))))
 
 (def class-str
-  "package com.chunkmapper.writer;
-
-import com.mojang.nbt.ByteTag;
-import com.mojang.nbt.CompoundTag;
-import com.mojang.nbt.DoubleTag;
-import com.mojang.nbt.FloatTag;
-import com.mojang.nbt.ListTag;
+  "package com.chunkmapper;
 
 public class Test {
 public static void main(String[] args) {
@@ -109,7 +107,7 @@ public static void main(String[] args) {
 }}
 ")
 
-(def f "/Users/matthewmolloy/workspace/chunkmapper2/src/com/chunkmapper/writer/Test.java")
+(def f "/Users/matthewmolloy/workspace/chunkmapper2/src/com/chunkmapper/Test.java")
 (spit f
       (format class-str (apply str code-lines)))
 
